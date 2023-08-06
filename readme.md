@@ -15,3 +15,4 @@ Notes:
 * gRPC services are without function in this MWE, they just demonstrate that the original project uses them and thus the required packages are installed (in case those lead to conflicts)
 * Auth is faked here, the SignalR connection sens a JWT Bearer token when starting the connection - this works in the original project, so here just as a fake demonstration and not expected to interfere
 * Starting the connection _does_ work, the problem comes when attempting to access `CreateHubProxy`
+* The project is configured for .NET 8 preview 6 already
