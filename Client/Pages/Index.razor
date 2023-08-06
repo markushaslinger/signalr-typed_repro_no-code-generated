@@ -31,11 +31,14 @@ Welcome to your new app.
         try
         {
             var hub = hubConnection.CreateHubProxy<ITestHub>(); // Exception thrown here
-            var subscription = hubConnection.Register(this);
+            
+            // I'm aware this class does not implement the interface, but we won't reach this point in the program,
+            // so I ignored that issue for this demonstration
+            var subscription = hubConnection.Register(this); 
             await hub.SendMessage(new TestMessage
             {
-                Message = "Blubb",
-                Sender = "aaa"
+                Message = "foo",
+                Sender = "bar"
             });
         }
         catch (Exception ex)
