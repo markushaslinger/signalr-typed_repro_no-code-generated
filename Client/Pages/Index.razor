@@ -1,0 +1,46 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR.Client
+@using TypedSignalR.Client
+@using global::Shared
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        var url = new Uri(new Uri("http://localhost:5100"), TestHubConfig.Route);
+        
+        var hubConnection = new HubConnectionBuilder()
+            .WithUrl(url, options =>
+            {
+                options.AccessTokenProvider = () =>
+                {
+                    // faked here, normally msal jwt
+                    return Task.FromResult((string?) "abcd1234");
+                };
+            })
+            .WithAutomaticReconnect()
+            .Build();
+        
+        await hubConnection.StartAsync();
+        try
+        {
+            var hub = hubConnection.CreateHubProxy<ITestHub>(); // Exception thrown here
+            var subscription = hubConnection.Register(this);
+            await hub.SendMessage(new TestMessage
+            {
+                Message = "Blubb",
+                Sender = "aaa"
+            });
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
